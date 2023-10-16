@@ -1,0 +1,34 @@
+const seat = document.querySelectorAll('.seat');
+const fakeSeat = document.querySelectorAll('.fake_seat');
+const ticket_counter = document.querySelector('#count');
+const ticket_price_total = document.querySelector('#total');
+const submitButton = document.querySelector('#btn');
+let count = 0;
+let ticket_price = 0;
+
+seat.forEach(seat => {
+    seat.addEventListener('click', () => {
+        if (!seat.classList.contains('occupied')) {
+            const seatId = seat.getAttribute('data-seat-id'); // Get the seat ID
+            if (seat.classList.contains('active')) {
+                seat.classList.remove('active');
+                seat.style.backgroundColor = '#444451';
+                count--;
+                ticket_price -= 250;
+            } else {
+                seat.classList.add('active');
+                seat.style.backgroundColor = '#0081cb';
+                count++;
+                ticket_price += 250;
+            }
+            ticket_price_total.innerHTML = `${ticket_price}`;
+            ticket_counter.innerHTML = `${count}`;
+        }
+    });
+});
+// Disable click event for fake seats
+fakeSeat.forEach(fake => {
+    fake.addEventListener('click', (event) => {
+        event.preventDefault();
+    });
+});

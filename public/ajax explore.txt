@@ -1,0 +1,29 @@
+$('.add_to_explore').click(function(e){
+          e.preventDefault();
+          var movie_id = $(this).attr('data-movie-id');
+          $.ajax({
+              method: "GET",
+              url: "{{route('add_to_explore')}}",
+              data: {
+                  '_token': "{{csrf_token()}}",
+                  'movie_id': movie_id,
+              },
+              success: function(data){
+                  if(data.status == true){
+                    $('#explore_success').show();
+                    // Find the row to update
+                    var rowToUpdate = $('.movieRow' + data.movie_id);
+                    // Check if the movie is explored or not and update the content accordingly
+                    if (data.explored == true){
+                        rowToUpdate.find('.delete_explore').text('Rm explore');
+                        rowToUpdate.find('.delete_explore').addClass('badge-danger');
+                        rowToUpdate.find('.delete_explore').removeClass('badge-info');
+                    }else{
+                        rowToUpdate.find('.delete_explore').text('explore');
+                        rowToUpdate.find('.delete_explore').addClass('badge-info');
+                        rowToUpdate.find('.delete_explore').removeClass('badge-danger');
+                    }
+                  }
+              }
+          })
+      });

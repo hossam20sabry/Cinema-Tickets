@@ -1,0 +1,252 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('sections', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('screen_id');
+            $table->integer('section_number');
+            $table->string('total_rows');
+            $table->string('total_columns');
+            $table->timestamps();
+            $table->foreign('screen_id')->references('id')->on('screens')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('sections');
+    }
+};
+
+........
+
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Screen;
+use App\Models\Theater;
+use App\Models\Row;
+use App\Models\Seat;
+
+class Section extends Model
+{
+    use HasFactory;
+    use \Znck\Eloquent\Traits\BelongsToThrough;
+
+
+    public function screen(){
+        return $this->belongsTo(Screen::class);
+    }
+    public function rows(){
+        return $this->hasMany(Row::class);
+    }
+    public function seats(){
+        return $this->hasManyThrough(Seat::class, Row::class);
+    }
+    public function theater(){
+        return $this->belongsToThrough(Theater::class, Screen::class);
+    }
+}
+--------------------------------------
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('rows', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('section_id');
+            $table->string('name');
+            $table->integer('seats_count');
+            $table->timestamps();
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('CASCADE');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('rows');
+    }
+};
+
+....................
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Section;
+use App\Models\Seat;
+
+class Row extends Model
+{
+    use HasFactory;
+    public function section(){
+        return $this->belongsTo(Section::class);
+    }
+    public function seats(){
+        return $this->hasMany(Seat::class);
+    }
+}
+=======================================================
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('seats', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('theater_id');
+            $table->string('seat_number');
+            $table->enum('type', ['standard', 'VIP'])->default('standard');
+            $table->enum('status', ['booked', 'available','pending'])->default('available');
+            $table->timestamps();
+            $table->foreign('theater_id')->references('id')->on('theaters')->onDelete('CASCADE');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('seats');
+    }
+};
+
+.........
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Row;
+
+class Seat extends Model
+{
+    use HasFactory;
+    public function rows(){
+        return $this->belongsTo(Row::class);
+    }
+}
+
+//////////////
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('screens', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('theater_id');
+            $table->integer('screen_number');
+            $table->string('total_columns');
+            $table->string('total_rows');
+            $table->string('total_sections');
+            $table->string('section_columns');
+            $table->timestamps();
+            $table->foreign('theater_id')->references('id')->on('theaters')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('screens');
+    }
+};
+
+.......
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Theater;
+use App\Models\Section;
+use App\Models\Row;
+use App\Models\Seat;
+use Illuminate\Support\Facades\DB;
+
+class Screen extends Model
+{
+    use HasFactory;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
+    
+    public function theater(){
+        return $this->belongsTo(Theater::class);
+    }
+    public function sections(){
+        return $this->hasMany(Section::class);
+    }
+    public function rows(){
+        return $this->hasManyThrough(Row::class, Section::class);
+    }
+    // public function seats(){
+    //     return $this->hasManyDeep(Seat::class, [
+    //         Section::class,
+    //         Row::class,
+    //         Seat::class
+    //     ]);
+    // }
+
+    public function seats(){
+        return DB::table('seats')
+        ->join('rows', 'seats.row_id', '=', 'rows.id')
+        ->join('sections', 'rows.section_id', '=', 'sections.id')
+        ->join('screens', 'sections.screen_id', '=', 'screens.id')
+        ->where('screens.id', $this->id) // Assuming $this->id is the ID of the Screen model
+        ->select('seats.*')
+        ->get();
+    }
+    
+}

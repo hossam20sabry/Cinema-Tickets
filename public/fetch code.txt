@@ -1,0 +1,97 @@
+ $('#select_theater').on('change', function() {
+            var selectedOption = $(this).find('option:selected');
+            var getTheaterDatesUrl = selectedOption.data('url');
+            console.log(selectedOption.val());
+
+            $.get(getTheaterDatesUrl, function(data) {
+                var selectDate = $('#select_date');
+                selectDate.empty();
+                selectDate.append('<option class="date" value="" disabled>Date</option>');
+                $.each(data, function(index, showTime) {
+                    selectDate.append($('<option>', {
+                        value: showTime.date,
+                        text: showTime.date,
+                        id:'date',
+                        'data-url': "{{ route('theater-dates', ['theater_id' => $theater->id, 'movie_id' => $movie->id]) }}"
+                    }));
+                });  
+            });
+        });
+        //select date 
+        $('#select_date').on('change', function() {
+            var selectedOption = $(this).find('option:selected');
+            var getDateUrl = selectedOption.data('url');
+            var selectedDate = $(this).val();
+            var updatedUrl = getDateUrl + '/' + selectedDate;
+            $.get(updatedUrl, function(data){
+                var selectTime = $('#select_time');
+                selectTime.empty();
+                selectTime.append('<option disabled selected>Time</option>');
+                $.each(data, function(index, showTime){
+                    selectTime.append($('<option>', {
+                        value: showTime.start_time,
+                        text:showTime.start_time,
+                        id:'time',
+                        'data-url': updatedUrl,
+                    }));
+                });
+            });
+        });
+        // select time 
+        $('#select_time').on('change', function(){
+            var selectedOption = $(this).find('option:selected');
+            var getTimeUrl = selectedOption.data('url');
+            var selectTime = $(this).val();
+            var updatedUrl = getTimeUrl + '/' + selectTime;
+            $.get(updatedUrl, function(data){
+                var selectScreen = $('#select_screen');
+                selectScreen.empty();
+                selectScreen.append('<option disabled selected>Screen</option>');
+                $.each(data, function(index, showTime){
+                    selectScreen.append($('<option>',{
+                        value:showTime.id,
+                        id:'showTime_id',
+                        text:showTime.screen_id,
+                        'data-url': updatedUrl,
+                    }));
+                });
+            });
+        });
+
+        $('#formInfo1').submit(function(e){
+            e.preventDefault();
+            $('#theater_id_error').text('');
+            $('#date_error').text('');
+            $('#time_error').text('');
+            $('#showTime_id_error').text('');
+
+            
+            let theater_id = $('#theater_id').val();
+            console.log(theater_id);
+            let date = $('#date').val();
+            let time = $('#time').val();
+            let showTime_id = $('#showTime_id').val();
+            let _token = $('input[name="_token"]').val();
+            
+            $.ajax({
+                url:"{{route('get_info1')}}",
+                method:"POST",
+                data:{
+                    theater_id:theater_id,
+                    date:date,
+                    time:time,
+                    showTime_id:showTime_id,
+                    _token:_token
+                },
+                success: function(data){
+                    
+                },
+                error: function(reject){
+                    let response = $.parseJSON(reject.responseText);
+                    console.log(response);
+                    $.each(response.errors, function(key, value){
+                        $("#"+key+"_error").text(value);
+                    })
+                },
+            });
+        });

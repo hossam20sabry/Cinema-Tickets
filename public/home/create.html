@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./bootstrap-5.2.3-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="./css/create.css">
+    <title>Main</title>
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-md bg-body-tertiary">
+        <div class="container">
+            <img src="./img/header logo 103.png" class="nav_img img-fluid" alt="">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            
+            <span class="navbar-toggler-icon"></span>
+            
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">learn</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="dropdown-item">learn bootstrap</a></li>
+                            <li><a href="#" class="dropdown-item">where to go</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container pt-3">
+
+
+        <form class="col-md-6 col-sm-12">
+            <h1 class="head-title text-center py-3">Create Movie</h1>
+
+            <div class="mb-3">
+                <label for="movie_name" class="form-label">Movie Name</label>
+                <input type="text" class="form-control" id="movie_name">
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="text" class="form-control" id="rating" placeholder="9.9">
+            </div>
+            <div class="mb-3">
+                <label for="kind" class="form-label">Kind</label>
+                <input type="text" class="form-control" id="kind">
+            </div>
+            <div class="mb-3">
+                <label for="release_date" class="form-label">Release Date</label>
+                <input type="date" class="form-control" id="release_date">
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" class="form-control" id="category" placeholder="PG-13">
+            </div>
+            <div class="mb-3">
+                <label for="duration" class="form-label">Duration</label>
+                <input type="text" class="form-control" id="duration" placeholder="2h 24m">
+            </div>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+            </div>
+            <button type="submit" class="btn btn-primary col-12 mb-5">Submit</button>
+        </form>
+        
+    </div>
+
+
+    
+    <footer>
+        <p>&copy; 2023 Cinema Booking Website. All rights reserved.</p>
+    </footer>
+    
+
+    <script src="./bootstrap-5.2.3-dist/js/bootstrap.js"></script>
+</body>
+</html>

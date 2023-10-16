@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Selection</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .seat {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: lightgray;
+            border: 1px solid #ccc;
+        }
+        .selected {
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Seat Selection</h2>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="d-flex flex-wrap">
+                    <!-- Loop to generate seats -->
+                    <div class="seat" data-seat="A1">A1</div>
+                    <div class="seat" data-seat="A2">A2</div>
+                    <!-- Add more seats as needed -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h4>Selected Seats:</h4>
+                <ul id="selected-seats"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Array to store selected seats
+            var selectedSeats = [];
+
+            // Function to toggle seat selection
+            function toggleSeatSelection(seat) {
+                if (selectedSeats.includes(seat)) {
+                    // Seat is already selected, deselect it
+                    selectedSeats = selectedSeats.filter(function (item) {
+                        return item !== seat;
+                    });
+                    $("div[data-seat='" + seat + "']").removeClass("selected");
+                } else {
+                    // Seat is not selected, select it
+                    selectedSeats.push(seat);
+                    $("div[data-seat='" + seat + "']").addClass("selected");
+                }
+
+                // Update the list of selected seats
+                $("#selected-seats").html("");
+                selectedSeats.forEach(function (seat) {
+                    $("#selected-seats").append("<li>" + seat + "</li>");
+                });
+            }
+
+            // Event listener for seat click
+            $(".seat").click(function () {
+                var seat = $(this).data("seat");
+                toggleSeatSelection(seat);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./bootstrap-5.2.3-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="./css/payment.css">
+    <link rel="icon" href="./img/logo 102.png">
+    <title>payment</title>
+</head>
+<body>
+    
+    <header class="navbar navbar-expand-md text-white fixed-top">
+        <div class="container">
+            
+            <img src="./img/header logo 103.png" class="nav_img img-fluid" alt="">
+
+            <button class="navbar-toggler" 
+                type="button" 
+                data-bs-toggle="collapse"  
+                data-bs-target="#mainMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a href="#" class="nav-link" >Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Cinemas</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Movies</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container py-5" id="con">
+        <form  action="" method="post">
+            <legend class="text-center mb-3">Set up your credit card</legend>
+            
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">First name</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Last name</span>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Card number</span>
+                <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Expiration date</span>
+                <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Security code </span>
+                <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <a href="./user-data.html" type="submit" class="btn  mt-3" id="btn">NEXT</a>
+        </form>
+
+        <div class="card-succes mt-5">
+                <i class="checkmark">✓</i>
+                <h1>Success</h1> 
+                <p class="p-b">We received your purchase request;<br/> we'll be in touch shortly!</p>
+        </div>
+    </div>
+
+
+    
+    <footer>
+        
+        <p>&copy; 2023 Cinema Booking Website. All rights reserved.</p>
+        
+    </footer>
+
+    <script src="./bootstrap-5.2.3-dist/js/bootstrap.js"></script>
+</body>
+</html>

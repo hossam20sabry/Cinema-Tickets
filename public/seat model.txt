@@ -1,0 +1,162 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Screen;
+class Seat extends Model
+{
+    use HasFactory;
+
+    public function screen(){
+        return $this->belongsTo(Screen::class);
+    }
+}
+---------------------------------------------------
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('seats', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('screen_id');
+            $table->string('seat_number');
+	    $table->string('price')->nullable();
+            $table->tinyInteger('apearance')->default(1);
+            $table->enum('type', ['standard', 'VIP'])->default('standard');
+            $table->enum('status', ['booked', 'available','pending'])->default('available');
+            $table->timestamps();
+            $table->foreign('screen_id')->references('id')->on('screens')->onDelete('CASCADE');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('seats');
+    }
+};
+===========================================================
+			showTimes
+
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Movie;
+use App\Models\Booking;
+use App\Models\Theater;
+
+class ShowTime extends Model
+{
+    use HasFactory;
+    
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    public function movie(){
+        return $this->belongsTo(Movie::class);
+    }
+
+    public function booking(){
+        return $this->hasOne(Booking::class);
+    }
+
+    public function theater(){
+        return $this->belongsTo(Theater::class);
+    }
+}
+-----------------------------------------
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('show_times', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('movie_id');
+            $table->unsignedBigInteger('theater_id');
+            $table->unsignedBigInteger('screen_id');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->date('date')->nullable();
+            $table->integer('available_seats')->nullable();
+            $table->integer('total_seats')->nullable();
+            $table->timestamps();
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            $table->foreign('theater_id')->references('id')->on('theaters')->onDelete('cascade');
+            $table->foreign('screen_id')->references('id')->on('screens')->onDelete('cascade');
+
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('show_times');
+    }
+};
+==================================================
+				Bookings
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('show_time_id');
+            $table->unsignedBigInteger('user_id');
+            $table->integer('total_seats');
+            $table->boolean('payment_status')->default(false);
+            $table->enum('booking_status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+            $table->timestamps();
+
+            // Define foreign key constraints
+            $table->foreign('show_time_id')->references('id')->on('show_times')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('bookings');
+    }
+};

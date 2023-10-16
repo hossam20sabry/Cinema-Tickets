@@ -1,0 +1,30 @@
+*{
+    font-family: montserrat;
+}
+
+.navbar a{
+    text-transform: uppercase;
+}
+
+h1{
+    border-bottom: 1.5px solid #77acf1 ;
+    color:rgba(82, 82, 82, 0.705)
+}
+
+
+.btn-primary{
+    background: linear-gradient(to right, #77acf1, #3edbf0);
+    border: none;
+}
+
+footer{
+    background: linear-gradient(to right, #77acf1, #3edbf0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+footer p{
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    color: #fff;
+}

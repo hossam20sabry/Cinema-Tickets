@@ -1,0 +1,77 @@
+.content_center{
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+th{
+    text-transform: capitalize;
+    text-align: center;
+    background-color: white;
+
+}
+td{
+    text-align: center;
+    text-transform: uppercase;
+}
+.table-info-start{
+    text-align: start;
+}
+.main2{
+    display: flex;
+    flex-wrap: wrap;
+}
+.email-text{
+    text-transform: none;
+}
+.red_span{
+    color: red;
+}
+.img-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* .main-panel {
+    background-color: black;
+} */
+
+.form-group .poster-size{
+    width: 100px;
+    height: 150px;
+}
+.form-group .photo-size{
+    width: 180px;
+    height: 100px;
+}
+
+.email-lowercase{
+    text-transform: none;
+}
+.center-buuton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin_poster{
+    width: 300px;
+    height: 400px;
+    margin-left: 25%;
+}
+
+.admin_photo{
+    width: 100%;
+    height: 100%;
+}
+
+.admin_trailer{
+    width: 100%;
+    height:270px;
+}
+.admin_trailer iframe{
+    width: 100%;
+    height: 100%;
+}
+.table a{
+    cursor: pointer;
+}
