@@ -1,6 +1,6 @@
 # Cinema Tickets Booking System
 
-![logo 102](https://github.com/hossam20sabry/Cinema-Tickets/assets/132856143/abc62ed8-a1de-4167-bb6a-c1918db30b01)
+<img src="https://github.com/hossam20sabry/Cinema-Tickets/assets/132856143/abc62ed8-a1de-4167-bb6a-c1918db30b01" alt="Project Logo" width="200">
 
 
 The Cinema Tickets Booking System is a web application that allows users to book movie tickets online. It provides a user-friendly interface for selecting movie showtimes, choosing seats, making payments, and receiving e-tickets.
