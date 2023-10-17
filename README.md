@@ -1,6 +1,6 @@
 # Cinema Tickets Booking System
 
-![Project Logo](your-logo.png)
+![Project Logo](/home/img/logo 102.png)
 
 The Cinema Tickets Booking System is a web application that allows users to book movie tickets online. It provides a user-friendly interface for selecting movie showtimes, choosing seats, making payments, and receiving e-tickets.
 
