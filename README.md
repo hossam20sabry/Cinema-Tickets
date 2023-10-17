@@ -22,9 +22,7 @@ The Cinema Tickets Booking System is a web application that allows users to book
 
 - **Admin Panel**: An admin panel for managing movies, showtimes, theaters, and bookings.
 
-## Getting Started
 
-**Clone the Repository**: https://github.com/hossam20sabry/cinema-tickets.git
 
 
 ## Technologies Used
