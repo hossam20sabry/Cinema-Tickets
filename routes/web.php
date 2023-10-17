@@ -128,22 +128,7 @@ Route::get('all-bookings', [BookingsController::class, 'all_bookings'])->name('a
 Route::get('send-email/{user_id}', [BookingsController::class, 'send_email'])->name('send_email');
 Route::post('send-user-email/{user_id}', [BookingsController::class, 'send_user_email'])->name('send_user_email');
 
-// testing
-route::get('show_theater_movies', [moviesTheatersController::class, 'show_theater_movies']);    
-route::get('show_theater_screens', [TestController::class, 'show_theater_screens']);    
-route::get('show_screens_sections', [TestController::class, 'show_screens_sections']);    
-route::get('show_theater_sections', [TestController::class, 'show_theater_sections']);    
-route::get('show_section_rows', [TestController::class, 'show_section_rows']);    
-route::get('show_row_seats', [TestController::class, 'show_row_seats']);    
-route::get('show_screens_rows', [TestController::class, 'show_screens_rows']);    
-route::get('show_section_seats', [TestController::class, 'show_section_seats']);    
-route::get('show_theater_rows', [TestController::class, 'show_theater_rows']);    
-route::get('show_section_theater', [TestController::class, 'show_section_theater']);    
-route::get('show_screen_seats', [TestController::class, 'show_screen_seats']);  
-route::get('show_movie_showtimes', [TestController::class, 'show_movie_showtimes']);  
-route::get('get-full-namespace', [TestController::class, 'get_full_namespace']);  
-Route::get('/qrCode', [TestController::class, 'qrCode']);
-Route::get('/total', [TestController::class, 'total']);
+
 
 //ajax 
 route::get('add_data', [TestController::class, 'add_data']);
