@@ -19,6 +19,7 @@
                     <div class="card-body" style="--bs-card-spacer-y: 1rem; --bs-card-spacer-x: 0rem">
                         <h5 class="card-title">{{$movie->name}}</h5>
                         {{-- <p class="card-text capi">Duration: {{$movie->duration}}<br>Director: {{$movie->director}}</p> --}}
+                        <p class="card-text capi">Renevue: ${{$movie->movie_renevues}}</span></p>
                         <p class="card-text red capi">Number: <span>{{$key + 1}}</span></p>
                         <a href="{{ route('new_booking', $movie->id) }}" class="btn btn-primary">
                             <img src="{{asset('home/img/logo 102.png')}}" class="img-fluid" alt="..">
