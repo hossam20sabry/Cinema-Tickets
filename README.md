@@ -1,7 +1,7 @@
 # Cinema Tickets Booking System
 
 <p align="center">
-  <img src="https://github.com/hossam20sabry/Cinema-Tickets/assets/132856143/abc62ed8-a1de-4167-bb6a-c1918db30b01" alt="Project Logo..." width="200">
+  <img src="https://github.com/hossam20sabry/Cinema-Tickets/assets/132856143/8150d075-34a7-4f98-bab4-2507514a72c1" alt="Project Logo" width="200">
 </p>
 
 
