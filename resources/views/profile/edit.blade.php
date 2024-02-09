@@ -1,32 +1,4 @@
-{{-- <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout> --}}
 
 @extends('home.layout')
 
@@ -36,7 +8,7 @@
         <div class="col-12 box_shadow p-3 rounded">
             <h4 class="text-capitalize">Profile information</h4>
             <p class="text-capitalize">Update your account's profile information and email address.</p>
-            <form action="{{ route('profile.update') }}" method="post">
+            <form action="{{ route('profile.update', ['guard' => 'web']) }}" method="post">
                 @csrf
                 @method('patch')
 
@@ -101,7 +73,7 @@
         <div class="col-12 box_shadow p-3 rounded">
             <h4 class="text-capitalize">Update Password</h4>
             <p class="text-capitalize">Ensure your account is using a long, random password to stay secure.</p>
-            <form action="{{ route('password.update') }}" method="post">
+            <form action="{{ route('password.update', ['guard' => 'web']) }}" method="post">
                 @csrf
                 @method('put')
 

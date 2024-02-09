@@ -26,8 +26,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 
         Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [AdminProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::patch('/profile/{guard}', [AdminProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile/{guard}', [AdminProfileController::class, 'destroy'])->name('profile.destroy');
 
         //theaters
         Route::prefix('theaters')->name('theaters.')->group(function () {

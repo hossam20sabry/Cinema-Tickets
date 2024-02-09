@@ -6,7 +6,7 @@
         <div class="col-12 box_shadow p-3 rounded">
             <h4 class="text-capitalize">Profile information</h4>
             <p class="text-capitalize">Update your account's profile information and email address.</p>
-            <form action="{{ route('admin.profile.update') }}" method="post">
+            <form action="{{ route('admin.profile.update', ['guard' => 'admin']) }}" method="post">
                 @csrf
                 @method('patch')
                 
@@ -72,7 +72,7 @@
         <div class="col-12 box_shadow p-3 rounded">
             <h4 class="text-capitalize">Update Password</h4>
             <p class="text-capitalize">Ensure your account is using a long, random password to stay secure.</p>
-            <form action="{{ route('admin.password.update') }}" method="post">
+            <form action="{{ route('admin.password.update', ['guard' => 'admin']) }}" method="post">
                 @csrf
                 @method('put')
 
@@ -120,7 +120,7 @@
             </form>
         </div>
     </div>
-    <form action="{{ route('admin.profile.destroy') }}" method="post">
+    <form action="{{ route('admin.profile.destroy', ['guard' => 'admin']) }}" method="post">
         @csrf
         @method('delete')
         <div class="row">
