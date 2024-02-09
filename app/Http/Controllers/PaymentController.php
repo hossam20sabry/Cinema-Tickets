@@ -16,6 +16,8 @@ class PaymentController extends Controller
 
         $booking = Booking::find($request->booking_id);
 
+        if(!$booking) return redirect()->route('home');
+
         $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
         
         $redirectUrl = route('stripe.checkout.success').'?session_id={CHECKOUT_SESSION_ID}';
@@ -51,11 +53,12 @@ class PaymentController extends Controller
 
     public function checkoutSuccess(Request $request){
 
-        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-
         $booking = Booking::find($request->booking_id);
 
-        if(!$booking) return redirect('/');
+        if(!$booking) return redirect()->route('home');
+
+        $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+
 
         $booking->payment_status = true;
         $booking->booking_status = 'confirmed';

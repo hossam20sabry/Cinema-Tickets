@@ -7,8 +7,16 @@ use Illuminate\Http\Request;
 
 class TheaterController extends Controller
 {
-    public function index(){
-        $theaters = Theater::all();
+    public function index(Request $request){
+        
+        $query = Theater::query();
+
+        if($request->has('search')){
+            $query->where('name' , 'like' , "%{$request->get('search')}%");
+        }
+
+        $theaters = $query->paginate(6);
+
         $kinds = Kind::all();
         return response()->view('home.theaters.index' , compact('theaters' , 'kinds'));
     }

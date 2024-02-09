@@ -133,7 +133,7 @@
         <div class="row">
             <h1 class="text-center text-uppercase">Movie Trailer</h1>
             <div class="ratio ratio-16x9 my-2">
-                {{-- <iframe src="/trailers/{{$booking->movie->trailer_url}}" title="MOVIE TRAILER" allowfullscreen ></iframe> --}}
+                <iframe src="{{asset('/trailers/1706489443.mp4')}}" title="MOVIE TRAILER" allowfullscreen ></iframe>
             </div>
         </div>
     </div>
@@ -158,6 +158,7 @@
 
         // handling phase 1
         let selected_theater_id = $('#selected_theater_id').val();
+        let booking_id = $('#booking_id').val();
 
         if(selected_theater_id){
             console.log(selected_theater_id);
@@ -170,11 +171,15 @@
                 url:"{{route('bookings.theater')}}",
                 type:"POST",
                 data:{
+                    booking_id: booking_id,
                     theater_id: selected_theater_id,
                     movie_id:movie_id,
                     _token:_token
                 },
                 success:function(data){
+                    if(data.status == 404){
+                        window.location.href = "{{route('bookings.redirect')}}";
+                    }
                     $date.html('<option value="" disabled selected>Date</option>');
                     var previousValue = null;
                     $.each(data, function(index, showtime){
@@ -203,11 +208,15 @@
                     url:"{{route('bookings.theater')}}",
                     type:'post',
                     data:{
+                        booking_id: booking_id,
                         theater_id: $(this).val(),
                         movie_id:movie_id,
                         _token:_token
                     },
                     success:function(data){
+                        if(data.status == 404){
+                            window.location.href = "{{route('bookings.redirect')}}";
+                        }
                         $date.html('<option value="" disabled selected>Date</option>');
                         var previousValue = null;
                         $.each(data, function(index, showtime){
@@ -238,11 +247,15 @@
                 url:"{{route('bookings.date')}}",
                 type:'post',
                 data:{
+                    booking_id: booking_id,
                     showtime_id: $(this).val(),
                     movie_id:movie_id,
                     _token:_token
                 },
                 success:function(data){
+                    if(data.status == 404){
+                        window.location.href = "{{route('bookings.redirect')}}";
+                    }
                     $time.html('<option value="" disabled selected>time</option>');
                     var previousValue = null;
                     $.each(data, function(index, showtime){
@@ -274,11 +287,15 @@
                 url:"{{route('bookings.time')}}",
                 type:'post',
                 data:{
+                    booking_id: booking_id,
                     showTime_id:$(this).val(),
                     movie_id:movie_id,
                     _token:_token
                 },
                 success:function(data){
+                    if(data.status == 404){
+                        window.location.href = "{{route('bookings.redirect')}}";
+                    }
                     var screens = data.screens;
                     var show_time = data.show_time;
 
@@ -327,6 +344,7 @@
                 url:"{{route('bookings.store2')}}",
                 type:'post',
                 data:{
+                    booking_id:booking_id,
                     _token:_token,
                     theater_id:theater_id,
                     date:date,
@@ -335,6 +353,10 @@
                     booking_id:booking_id
                 },
                 success:function(data){
+                    if(data.status == 404){
+                        window.location.href = "{{route('bookings.redirect')}}";
+                    }
+                    
                     if(data.status === 200){
                         window.location.href = "{{route('bookings.seats', $booking->id)}}";
                     }

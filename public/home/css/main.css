@@ -101,6 +101,9 @@ body{
 	color: #fff;
 	text-align: center;
 }
+#msg{
+	width: 90%;
+}
 
 .img-fluid{
     width: 20px;

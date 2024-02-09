@@ -50,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('bookings')->name('bookings.')->group(function(){
 
         Route::get('/', [BookingsController::class, 'index'])->name('index');
+        Route::get('redirect', [BookingsController::class, 'redirect'])->name('redirect');
 
         // phase 1
         Route::post('/store', [BookingsController::class, 'store'])->name('store');

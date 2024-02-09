@@ -2,6 +2,15 @@
 @section('css', '/home/css/main.css')
 @section('content')
 <section class="banner">
+    @if(session('error'))
+    <div class="row mb-5" id="msg">
+        <div class="col-12">
+            <div class="alert alert-danger">
+                {{session('error')}}
+            </div>
+        </div>
+    </div>
+    @endif
     <h2>Welcome to our Cinemas</h2>
     <p>Book your favorite movies now and enjoy your time at our cinemas.</p>
     <!-- <a href="./movie-page.html">View Movies</a> -->
@@ -51,6 +60,7 @@
         @endforeach
     </div>
 
+
     {{-- //theaters// --}}
     <div class="row mt-2">
         <div class="col-sm-6">
@@ -60,7 +70,7 @@
             @error('search')
                     <p class="text-danger m-2 p-1">{{ $message }}</p>
             @enderror
-            <form class="d-flex box_shadow p-2 rounded" role="search" action="{{ route('theaters.search') }}" method="get">
+            <form class="d-flex box_shadow p-2 rounded" role="search" action="{{ route('theaters.index') }}" method="get">
                 <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
                 <button class="btn btn-outline-info" type="submit">Search</button>
             </form>
@@ -87,79 +97,21 @@
             </div>
         </div>
         @endforeach
+        <div class="col-12 d-flex justify-content-center">
+            {{ $theaters->links() }} 
+        </div>
     </div>
 </section>
 
-{{-- <section id="theater" class="contain bg">
-    <button id="theater-left-arrow" class="left_arrow"><</button>
-    <button id="theater-right-arrow" class="right_arrow">></button>
-    <div class="row">
-        <div class="col-sm-6">
-            <h2 class="main">THEATERS</h2>
-        </div>
-        <div class="col-sm-6  d-flex justify-content-end">
-            @error('search')
-                    <p class="text-danger m-2 p-1">{{ $message }}</p>
-            @enderror
-            <form class="d-flex box_shadow p-2 rounded" role="search" action="{{ route('theaters.search') }}" method="get">
-                <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
-                <button class="btn btn-outline-info" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-    <div id="theater-container" class="movie_container">
-        @foreach ($theaters as $theater)
-        <div class="movie_card">
-            <a href="">
-            <div class="head">
-                <img src="/cinema_photos/{{$theater->img}}">
-            </div>
-            <div class="tail">
-                <div class="left">
-                    <h2 class="hh2 text-uppercase">{{ $theater->name }}</h2>
-                    <p class="card-text">Address: <span class="text-uppercase">{{$theater->city}} - {{$theater->location}}</span></p>
-                </div>
-                <div class="right">
-                    
-                </div>
-            </div>
-            </a>
-        </div>
-        @endforeach
-        
-    </div>
-
-</section> --}}
 @endsection
 @section('script')
 <script>
 
-    const theaterContainer = document.getElementById("theater-container");
-    const theater_leftArrow = document.getElementById("theater-left-arrow");
-    const theater_rightArrow = document.getElementById("theater-right-arrow");
-
-    let theaterScrollPosition = 400;
-
-
-    theater_leftArrow.addEventListener("click", () => {
-        console.log(theaterScrollPosition);
-        if(theaterScrollPosition < 400) return;
-        theaterScrollPosition -= 400;
-        theaterContainer.scrollTo({
-            left: theaterScrollPosition,
-            behavior: "smooth"
-        });
-    });
-
-    theater_rightArrow.addEventListener("click", () => {
-        console.log(theaterScrollPosition);
-        if(theaterScrollPosition > 1200) return;
-        theaterScrollPosition += 400;
-        theaterContainer.scrollTo({
-            left: theaterScrollPosition,
-            behavior: "smooth"
-        });
-    }); 
+    $(document).ready(function(){
+        setTimeout(() => {
+            $('#msg').hide();
+        }, 5000);
+    })
 
 </script>
 @endsection

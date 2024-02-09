@@ -26,8 +26,8 @@ class DeletePendingBookings implements ShouldQueue
      */
     public function handle(): void
     {
-        Booking::where('booking_status', '!=', 'confirmed')
-            ->where('created_at', '<', now()->subMinutes(2))
+        Booking::where('booking_status', 'pending')
+            ->where('created_at', '<', now()->subMinutes(10))
             ->delete();
         
     }

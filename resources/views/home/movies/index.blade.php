@@ -12,7 +12,7 @@
             @error('search')
                     <p class="text-danger m-2 p-1">{{ $message }}</p>
             @enderror
-            <form class="d-flex box_shadow m-2 p-1 rounded" role="search" action="{{ route('movies.search') }}" method="get">
+            <form class="d-flex box_shadow m-2 p-1 rounded" role="search" action="{{ route('movies.index') }}" method="get">
                 <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
                 <button class="btn btn-outline-info" type="submit">Search</button>
             </form>
@@ -44,7 +44,9 @@
             @endforeach
             
             
+            
         </div>
+
         @else
             <h1 class="text-center">No movies found</h1>
         @endif

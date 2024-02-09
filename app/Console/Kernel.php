@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
     
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('destroyBookings')->everyMinute();
         $schedule->job(new DeletePendingBookings())->everyMinute();
     }
 

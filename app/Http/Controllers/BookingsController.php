@@ -42,6 +42,7 @@ class BookingsController extends Controller
     public function create($booking_id, $theater_id = null){
         $kinds = Kind::all();
         $booking = Booking::find($booking_id);
+        if(!$booking) return redirect()->route('bookings.redirect');
         $movie = Movie::findOrFail($booking->movie_id);
         $theaters = $movie->theaters;
         if($theater_id){
@@ -52,12 +53,18 @@ class BookingsController extends Controller
     }
 
     public function theater(Request $request){
+        $booking = Booking::find($request->booking_id);
+        if(!$booking) return response()->json(['status' => 404]);
+
         $theater = Theater::findOrFail($request->theater_id);
         $show_times = $theater->showTimes->where('movie_id', $request->movie_id);
         return response()->json($show_times);
     }
 
     public function date(Request $request){
+        $booking = Booking::find($request->booking_id);
+        if(!$booking) return response()->json(['status' => 404]);
+
         $show_time = ShowTime::find($request->showtime_id);
         $movie_id = $request->movie_id;
         $theater_id = $show_time->theater_id;
@@ -72,6 +79,9 @@ class BookingsController extends Controller
     }
 
     public function time(Request $request){
+        $booking = Booking::find($request->booking_id);
+        if(!$booking) return response()->json(['status' => 404]);
+
         $show_time = ShowTime::find($request->showTime_id);
         $screens = $show_time->screens;
         return response()->json([
@@ -84,6 +94,9 @@ class BookingsController extends Controller
 
     //phase 2
     public function store2(Request $request){
+        $booking = Booking::find($request->booking_id);
+        if(!$booking) return response()->json(['status' => 404]);
+
         $request->validate([
             'theater_id' => 'required',
             'date' => 'required',
@@ -95,8 +108,6 @@ class BookingsController extends Controller
             'time.required' => 'please select time',
             'screen_id.required' => 'please select screen',
         ]);
-
-        $booking = Booking::find($request->booking_id);
 
         $booking->show_time_id = $request->time;
         $booking->screen_id = $request->screen_id;
@@ -111,11 +122,14 @@ class BookingsController extends Controller
 
     public function seats($booking_id){
         $booking = Booking::find($booking_id);
+        if(!$booking) return redirect()->route('bookings.redirect');
+
         return view('home.bookings.seats', compact('booking'));
     }
 
     public function select(Request $request){
-        // return response()->json($request->booking_id);
+        $booking = Booking::find($request->booking_id);
+        if(!$booking) return response()->json(['status' => 404]);
 
         $selected_seats_size = $request->selected_seats_size;
 
@@ -129,6 +143,8 @@ class BookingsController extends Controller
         $seat = Seat::find($request->seatId);
         $letter = $seat->row->letter;
         $booking = Booking::find($request->booking_id);
+
+        // if(!$booking) return redirect()->back()->with('error', 'Your Booking is not found');
         $showTime = $booking->ShowTime;
         $hisBookings = $seat->bookings()->where('show_time_id', $showTime->id)->first();
 
@@ -158,10 +174,11 @@ class BookingsController extends Controller
     }
 
     public function unSelect(Request $request){
-        // return response()->json($request->booking_id);
+        $booking = Booking::find($request->booking_id);
+        if(!$booking) return response()->json(['status' => 404]);
+
         $seat = Seat::find($request->seatId);
         $letter = $seat->row->letter;
-        $booking = Booking::find($request->booking_id);
         $showTime = $booking->showTime;
         $hisBookings = $seat->bookings()->where('show_time_id', $showTime->id)->first();
         if($hisBookings){
@@ -176,13 +193,13 @@ class BookingsController extends Controller
     }
 
     public function storeSeats(Request $request){
-        // return response()->json($request->all());
+        
         $user = Auth::user();
         $kinds = Kind::all();
         $booking = Booking::find($request->booking_id);
 
 
-        if(!$booking) return redirect('/');
+        if(!$booking) return redirect()->route('bookings.redirect');
 
         
         $selectedSeats = explode(',', $request->input('selected_seats'));
@@ -205,6 +222,7 @@ class BookingsController extends Controller
 
     public function confirm($booking_id){
         $booking = Booking::find($booking_id);
+        if(!$booking) return redirect()->route('bookings.redirect');
         $kinds = Kind::all();
         return view('home.bookings.confirm', compact('booking', 'kinds'));
     }
@@ -216,7 +234,7 @@ class BookingsController extends Controller
 
     public function destroy(Request $request){
         $booking = Booking::find($request->booking_id);
-        if(!$booking) return redirect('/');
+        if(!$booking) return redirect()->route('bookings.redirect');
         $booking->delete();
         return redirect('/');
     }
@@ -248,6 +266,10 @@ class BookingsController extends Controller
         }
 
         return view('home.bookings.show', compact('booking', 'kinds'));
+    }
+
+    public function redirect(){
+        return redirect()->route('index')->with('error', 'Your Booking Time is finished, Please try again');
     }
 
 }

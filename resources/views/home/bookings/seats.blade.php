@@ -197,6 +197,10 @@
                             _token: _token
                         },
                         success:function(data){
+                            if(data.status == 404){
+                                window.location.href = "{{route('bookings.redirect')}}";
+                            }
+                            
                             if(data.status == 200){
                                 self.classList.remove('active');
                                 self.style.backgroundColor = '#444451';
@@ -228,6 +232,9 @@
                             _token: _token
                         },
                         success:function(data){
+                            if(data.status == 404){
+                                window.location.href = "{{route('bookings.redirect')}}";
+                            }
                             
                             if(data.status == 200){
                                 self.classList.add('active');
@@ -283,49 +290,7 @@
                 }
         });
 
-        //handle the whole thing about all seats selected
         
-        // $('#seatsForm').submit(function(e){
-        //     e.preventDefault();
-        //     msg.classList.add('d-none');
-        //     mainSpinner.classList.remove('d-none');
-        //     let _token = $('input[name="_token"]').val();
-        //     let selected_seats = selected_seats_input.value;
-
-        //     $.ajax({
-        //         url: "{{route('bookings.storeSeats')}}",
-        //         method: "POST",
-        //         data: {
-        //             selected_seats: selected_seats, 
-        //             booking_id: booking_id,
-        //             _token: _token
-        //         },
-        //         success:function(data){
-        //             if(data.status == 200){
-        //                 
-
-        //             }
-        //             else if(data.status == 400){
-        //                 msg.innerHTML = data.msg;
-        //                 msg.classList.remove('d-none');
-        //                 mainSpinner.classList.add('d-none');
-        //                 scrollTo(0, 0);
-        //             }
-        //             else if(data.status == 401){
-        //                 msg.innerHTML = data.msg;
-        //                 msg.classList.remove('d-none');
-        //                 mainSpinner.classList.add('d-none');
-        //                 scrollTo(0, 0);
-        //             }
-        //             else{
-        //                 msg.classList.remove('d-none');
-        //                 msg.innerHTML = 'Something went wrong';
-        //                 mainSpinner.classList.add('d-none');
-        //                 scrollTo(0, 0);
-        //             }
-        //         }
-        //     })
-        // })
 
     });
 </script>
