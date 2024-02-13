@@ -243,27 +243,16 @@ class BookingsController extends Controller
         $booking = Booking::find($booking_id);
         $kinds = Kind::all();
 
-        $details = [
-            'greeting' => 'Welcome to Cinema Tickets',
-            'firstline' => 'Good Day',
-            'secondtline' => 'This is your Booking Code: ' . $booking->QRcode,
-            'button' => 'Cinema Tickets',
-            'url' => route('index'),
-            'lastline' => 'Thank you',
-        ];
-
-        $user = Auth::user();
-
-        try {
-            Notification::send($user , new CinemaTickets($details));
-        } 
-        catch (\Exception $e) {
-            return view('home.bookings.show')->with([
-                'booking' => $booking,
-                'kinds' => $kinds,
-                'error' => 'Something went wrong with email sending, check your Bookings to get your booking code',
-            ]);
-        }
+        // try {
+        //     Notification::send($user , new CinemaTickets($details));
+        // } 
+        // catch (\Exception $e) {
+        //     return view('home.bookings.show')->with([
+        //         'booking' => $booking,
+        //         'kinds' => $kinds,
+        //         'error' => 'Something went wrong with email sending, check your Bookings to get your booking code',
+        //     ]);
+        // }
 
         return view('home.bookings.show', compact('booking', 'kinds'));
     }

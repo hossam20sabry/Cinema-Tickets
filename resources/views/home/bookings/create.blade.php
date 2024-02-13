@@ -120,7 +120,10 @@
                                 <td class="left-td">Release Date</td>
                                 <td>{{$booking->movie->release_date}}</td>
                             </tr>
-                            
+                            <tr>
+                                <td class="left-td">Revenue</td>
+                                <td>${{$movie->bookings->sum('total_price')}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

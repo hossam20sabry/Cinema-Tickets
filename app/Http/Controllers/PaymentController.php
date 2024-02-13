@@ -64,6 +64,19 @@ class PaymentController extends Controller
         $booking->booking_status = 'confirmed';
         $booking->QRcode = uniqid() . '-' . $booking->id;
         $booking->save();
+
+        $details = [
+            'greeting' => 'Welcome to Cinema Tickets',
+            'firstline' => 'Good Day',
+            'secondtline' => 'This is your Booking Code: ' . $booking->QRcode,
+            'button' => 'Cinema Tickets',
+            'url' => route('index'),
+            'lastline' => 'Thank you',
+        ];
+
+        $user = Auth::user();
+
+        Notification::send($user , new CinemaTickets($details));
         
 
         $response = $stripe->checkout->sessions->retrieve($request->session_id);

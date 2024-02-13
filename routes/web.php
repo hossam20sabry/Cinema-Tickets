@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile/{guard}', [ProfileController::class, 'update'])->name('profile.update');
@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
         Route::get('checkout/success', [PaymentController::class, 'checkoutSuccess'])->name('checkout.success');
     });
 
-
+    Route::get('/send_email', [HomeController::class, 'send_email'])->name('send_email');
 
 });
 

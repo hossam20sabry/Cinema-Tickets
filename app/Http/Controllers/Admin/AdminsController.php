@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class AdminsController extends Controller
 {
+    public function index(){
+        $admins = Admin::all();
+        return view('admin.admins', compact('admins'));
+    }
 
     public function destroy($id)
     {

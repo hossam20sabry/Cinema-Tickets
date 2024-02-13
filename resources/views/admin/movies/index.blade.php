@@ -50,7 +50,7 @@
             @foreach ($movies as $movie)
                 <tr>
                     <td class="text-capitalize">{{$movie->name}}</td>
-                    <td>${{$movie->movie_renevues}}</td>
+                    <td>${{$movie->bookings->sum('total_price')}}</td>
                     <td>
                         @if($movie->explore == 0)
                         <a href="{{route('admin.movies.explore', $movie->id)}}" class="btn btn-warning">Explore</a>

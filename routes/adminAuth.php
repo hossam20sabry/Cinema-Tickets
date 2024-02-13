@@ -40,7 +40,7 @@ Route::middleware('admin')->group(function () {
 
     Route::post('main/{admin}', [AdminsController::class, 'main'])->name('main');
 
-    Route::get('admins', [RegisteredUserController::class, 'index'])->name('admins.index');
+    Route::get('admins', [AdminsController::class, 'index'])->name('admins.index');
 
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
