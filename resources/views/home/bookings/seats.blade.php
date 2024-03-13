@@ -43,6 +43,9 @@
                                 <div class="col-sm-12 mb-3 d-flex justify-content-center">
                                     <label class="text-uppercase">{{$booking->movie->name}} in {{$booking->showTime->theater->name}}</label>
                                 </div>
+                                <div class="col-sm-12 mb-3 d-flex justify-content-center">
+                                    <p class="text-danger">if you go to another Page and come back please refresh the Page to Keep you Updated</p>
+                                </div>
                                 <div class="col-sm-12 d-flex justify-content-center" >
                                     <ul class="showcase">
                                         <li>
@@ -96,6 +99,11 @@
                                                             <div class="seat 
                                                                 @if($seat->bookings->count())
                                                                     @foreach($seat->bookings as $booking)
+                                                                        @foreach($booking->seats as $seat2)
+                                                                            @if($seat2->id == $seat->id)
+                                                                            selected active
+                                                                            @endif
+                                                                        @endforeach
                                                                         @if($booking->show_time_id == $booking->ShowTime->id && $booking->booking_status == 'confirmed' )
                                                                             occupied
                                                                         @endif
@@ -272,7 +280,7 @@
                                 msg.innerHTML = 'Something went wrong';
                                 // mainSpinner.classList.add('d-none');
                                 self.classList.remove('d-none');
-                                $('.spinnerNum'+seat_id).addClass('d-none');
+                                $('.spinnerNum'+data.seat_id).addClass('d-none');
                                 scrollTo(0, 0);
                             }
                         },

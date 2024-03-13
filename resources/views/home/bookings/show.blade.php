@@ -31,7 +31,7 @@
         <div class="col m-3">
             <div class="diiv">
                 <img src="{{asset('/home/icon/ticket (1).png')}}" class="top-img" alt="">
-            <p id="tickets_nums">{{$booking->total_seats}} Ticket <br>2D</p>
+            <p id="tickets_nums">{{$booking->seats->count()}} Ticket <br>2D</p>
             </div>
         </div>
         <div class="col m-3">

@@ -12,6 +12,7 @@ use App\Notifications\CinemaTickets;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Stripe;
 
@@ -128,97 +129,154 @@ class BookingsController extends Controller
     }
 
     public function select(Request $request){
-        $booking = Booking::find($request->booking_id);
-        if(!$booking) return response()->json(['status' => 404]);
-
-        $selected_seats_size = $request->selected_seats_size;
-
-        if($selected_seats_size > 5) {
-            return response()->json([
-                'status' => 400,
-                'msg' => 'The maximum number of seats is 6.',
-            ]);
-        }
-
-        $seat = Seat::find($request->seatId);
-        $letter = $seat->row->letter;
-        $booking = Booking::find($request->booking_id);
-
-        // if(!$booking) return redirect()->back()->with('error', 'Your Booking is not found');
-        $showTime = $booking->ShowTime;
-        $hisBookings = $seat->bookings()->where('show_time_id', $showTime->id)->first();
-
-        if(!$hisBookings){
+        DB::beginTransaction(); // Begin transaction
+    
+        try {
+            $booking = Booking::find($request->booking_id);
+    
+            if(!$booking) return response()->json(['status' => 404]);
+    
+            $showTime = $booking->ShowTime;
+    
+            $seat = Seat::find($request->seatId);
+            $BookingsCount = Auth()->user()->bookings->where('show_time_id', $showTime->id)->first()->seats()->count();
+            $selected_seats_size = $request->selected_seats_size;
+    
+            if($BookingsCount > 5) {
+                DB::rollback(); 
+                return response()->json([
+                    'status' => 400,
+                    'msg' => 'The maximum number of seats is 6.',
+                    'seat_id' => $seat->id,
+                ]);
+            }
+    
+            $letter = $seat->row->letter;
+    
+            $booked = $seat->bookings()->where('show_time_id', $showTime->id)->first();
+            $hisbooked = $seat->bookings()->where('show_time_id', $showTime->id)->where('user_id', Auth::user()->id)->first();
+    
+            if($hisbooked) {
+                DB::rollback(); 
+                return response()->json([
+                    'status' => 401, 
+                    'seat_id' => $seat->id,
+                    'msg' => "Seat [$letter$seat->number] Already selected. Refresh and try again.",
+                ]);
+            }
+    
+            if($booked) {
+                DB::rollback(); 
+                return response()->json([
+                    'status' => 401, 
+                    'seat_id' => $seat->id,
+                    'msg' => "Seat [$letter$seat->number] is no longer available.",
+                ]);
+            }
+    
             $booking->seats()->syncWithoutDetaching($seat->id);
             $booking->total_price += $seat->price;
             $booking->save();
-
+    
+            DB::commit(); 
+    
             return response()->json([
                 'status' => 200,
                 'seat_id' => $seat->id,
             ]);
-        }
-        else
-        {
+        } catch (\Exception $e) {
+            DB::rollback(); 
             return response()->json([
-                'status' => 401, 
-                'seat_id' => $seat->id,
-                'msg' => "Seat [$letter$seat->number] is no longer available.",
+                'status' => 500,
+                'error' => $e->getMessage(), 
             ]);
         }
-
-        // if something goes wrong
-        return response()->json([
-            'seat_id' => $seat->id,
-        ]);
     }
+    
 
     public function unSelect(Request $request){
-        $booking = Booking::find($request->booking_id);
-        if(!$booking) return response()->json(['status' => 404]);
-
-        $seat = Seat::find($request->seatId);
-        $letter = $seat->row->letter;
-        $showTime = $booking->showTime;
-        $hisBookings = $seat->bookings()->where('show_time_id', $showTime->id)->first();
-        if($hisBookings){
-            $booking->seats()->detach($seat->id);
-            $booking->total_price -= $seat->price;
-            $booking->save();
+        DB::beginTransaction(); 
+    
+        try {
+            $booking = Booking::find($request->booking_id);
+            if(!$booking) {
+                DB::rollback();
+                return response()->json(['status' => 404]);
+            }
+    
+            $seat = Seat::find($request->seatId);
+            $letter = $seat->row->letter;
+            $showTime = $booking->showTime;
+            $hisBookings = $seat->bookings()->where('show_time_id', $showTime->id)->first();
+            
+            if($hisBookings){
+                $booking->seats()->detach($seat->id);
+                $booking->total_price -= $seat->price;
+                $booking->save();
+    
+                DB::commit(); 
+    
+                return response()->json([
+                    'status' => 200,
+                    'seat_id' => $seat->id,
+                ]);
+            } else {
+                DB::rollback(); 
+                return response()->json([
+                    'status' => 404,
+                    'msg' => "No booking found for the seat.",
+                ]);
+            }
+        } catch (\Exception $e) {
+            DB::rollback(); 
             return response()->json([
-                'status' => 200,
-                'seat_id' => $seat->id,
+                'status' => 500,
+                'error' => $e->getMessage(), 
             ]);
         }
     }
+    
 
     public function storeSeats(Request $request){
-        
-        $user = Auth::user();
-        $kinds = Kind::all();
-        $booking = Booking::find($request->booking_id);
-
-
-        if(!$booking) return redirect()->route('bookings.redirect');
-
-        
-        $selectedSeats = explode(',', $request->input('selected_seats'));
-
-        if(count($selectedSeats) > 6) return redirect()->back()->with('error', 'The maximum number of seats is 6.');
-
-
-        if(count($selectedSeats) > 0){
-            $booking->total_seats = count($selectedSeats);
-            $booking->total_price = $booking->total_price + 10;
-            $booking->booking_status = 'reserved';
-            $booking->save();
-            return redirect()->route('bookings.confirm', $booking->id);
+        DB::beginTransaction(); 
+    
+        try {
+            $user = Auth::user();
+            $kinds = Kind::all();
+            $booking = Booking::find($request->booking_id);
+    
+            $showTime = $booking->ShowTime;
+            if(!$booking) {
+                DB::rollback(); 
+                return redirect()->route('bookings.redirect');
+            }
+    
+            $BookingsCount = Auth()->user()->bookings->where('show_time_id', $showTime->id)->first()->seats()->count();
+    
+            if($BookingsCount > 6) {
+                DB::rollback(); 
+                return redirect()->back()->with('error', 'The maximum number of seats is 6.');
+            }
+    
+            if($BookingsCount > 0){
+                $booking->total_seats = $BookingsCount;
+                $booking->total_price = $booking->total_price + 10;
+                $booking->booking_status = 'reserved';
+                $booking->save();
+    
+                DB::commit(); 
+    
+                return redirect()->route('bookings.confirm', $booking->id);
+            } else {
+                DB::rollback(); 
+                return redirect()->back()->with('error', 'Please Select Seat');
+            } 
+        } catch (\Exception $e) {
+            DB::rollback(); 
+            return redirect()->back()->with('error', $e->getMessage()); 
         }
-        else
-        {
-            return redirect()->back()->with('error', 'Please Select Seat');
-        } 
     }
+    
 
     public function confirm($booking_id){
         $booking = Booking::find($booking_id);

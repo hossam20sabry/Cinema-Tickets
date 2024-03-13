@@ -22,7 +22,7 @@
                 <td class="text-capitalize">{{$booking->ShowTime->date}}</td>
                 <td class="text-capitalize table_responsive">{{$booking->ShowTime->start_time}}</td>
                 <td class="text-capitalize table_responsive">{{$booking->booking_status}}</td>
-                <td class="text-capitalize table_responsive">{{$booking->total_seats}}</td>
+                <td class="text-capitalize table_responsive">{{$booking->seats->count()}}</td>
                 <td class="text-capitalize table_responsive">${{$booking->total_price}}</td>
                 <td>
                     <a href="{{route('bookings.show', $booking->id)}}" class="btn btn-primary">show</a>

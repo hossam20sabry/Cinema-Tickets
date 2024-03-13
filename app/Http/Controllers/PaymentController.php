@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use App\Notifications\CinemaTickets;
 use Illuminate\Http\Request;
+use App\Notifications\CinemaTickets;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Stripe;
